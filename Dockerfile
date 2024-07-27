@@ -30,6 +30,9 @@ COPY --chown=www-data:www-data . .
 
 RUN chmod -R 777 ./storage ./bootstrap/cache
 
+# Expose port 8080 for Nginx
+EXPOSE 8080
+
 # RUN COMPOSER INSTALL AND RUN BUILD
 # RUN npm install \
 #     && npm run build

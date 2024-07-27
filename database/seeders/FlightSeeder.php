@@ -22,7 +22,7 @@ class FlightSeeder extends Seeder
             foreach ($otherAirports as $otherAirport) {
                 $price = rand(100, 4000);
                 $distance = rand(300, 4000);
-                $timeInMinutes = intval($distance / 40);
+                $timeInMinutes = intval($distance / rand(40, 50));
 
                 \App\Models\Flight::create([
                     'start_airport_id' => $airport->id,
