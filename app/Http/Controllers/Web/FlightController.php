@@ -30,16 +30,14 @@ class FlightController
 
         foreach ($outboundFlights as $value) {
             $flights = [];
-            $airs = [];
+
             foreach ($value['path'] as $key => $path) {
                 if($key + 1 < count($value['path'])) {
                     $flights[] = Flight::where('start_airport_id', $path)->where('end_airport_id', $value['path'][$key + 1])->first();
                 }
-                $airs[] = Airport::find($path);
             }
 
             $flights_ida[] = [
-                'airs' => $airs,
                 'flights' => $flights,
                 'price' => $value['cost'],
                 'time_in_minutes' => $value['time'],
