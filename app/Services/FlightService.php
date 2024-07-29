@@ -19,10 +19,10 @@ class FlightService
             $graph[$flight->start_airport_id][] = $flight;
         }
 
-        return $this->aStarPareto($startAirportId, $endAirportId, $graph);
+        return $this->aSearchPareto($startAirportId, $endAirportId, $graph);
     }
 
-    private function aStarPareto(int $start, int $goal, $graph)
+    private function aSearchPareto(int $start, int $goal, $graph)
     {
         $openSet = new \SplPriorityQueue();
         $openSet->insert([$start, [], 0, 0, 0], 0); // (currentNode, path, cost, time, distance)
@@ -33,6 +33,11 @@ class FlightService
         while (!$openSet->isEmpty()) {
             list($current, $path, $cost, $time, $distance) = $openSet->extract();
             $path[] = $current;
+
+            // Limit the number of stops to 3
+            if(count($path) > 3) {
+                continue;
+            }
 
             if ($current == $goal) {
                 $paretoFrontier[] = compact('path', 'cost', 'time', 'distance');
@@ -54,16 +59,23 @@ class FlightService
                 $newTime = $time + $neighbor->time_in_minutes;
                 $newDistance = $distance + $neighbor->distance;
 
-                $priority = -($newCost + $newTime + $newDistance); // Use priority to determine the best path
+                $priority = $this->heuristics($newCost, $newTime, $newDistance); // Use priority to determine the best path
 
                 $openSet->insert(
                     [$neighbor->end_airport_id, $path, $newCost, $newTime, $newDistance],
                     $priority
                 );
             }
+
         }
 
+
         return $this->filterParetoOptimal($paretoFrontier);
+    }
+
+    private function heuristics($cost, $time, $distance)
+    {
+        return -($cost * 0.1 + $time + $distance * 0.1);
     }
 
     private function filterParetoOptimal($solutions)
