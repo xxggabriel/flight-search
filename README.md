@@ -1,66 +1,103 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Busca de Passagens Aéreas com Algoritmo A* e Fronteira de Pareto
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este projeto é uma aplicação em PHP utilizando o framework Laravel para buscar passagens aéreas cadastradas no banco de dados. A busca é realizada utilizando o algoritmo A* em conjunto com a fronteira de Pareto para selecionar os voos a serem listados com base em critérios de custo, tempo e distância.
 
-## About Laravel
+Este projeto foi desenvolvido como o trabalho final da disciplina de Análise e Estrutura de Dados do curso de Inteligência Artificial na Universidade Federal de Goiás. O objetivo do projeto é resolver problemas utilizando grafos.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Funcionalidades
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Cadastro de voos
+- Busca de voos utilizando o algoritmo A*
+- Filtragem de voos com a fronteira de Pareto
+- Listagem de voos otimizados de acordo com múltiplos critérios (custo, tempo e distância)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Requisitos
 
-## Learning Laravel
+- PHP 7.3 ou superior
+- Composer
+- Laravel 8.x
+- MySQL ou outro banco de dados suportado pelo Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Instalação
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. Clone o repositório:
+    ```sh
+    git clone https://github.com/xxggabriel/flight-search
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. Navegue até o diretório do projeto:
+    ```sh
+    cd flight-search
+    ```
 
-## Laravel Sponsors
+3. Instale as dependências do Composer:
+    ```sh
+    composer install
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4. Copie o arquivo `.env.example` para `.env` e configure suas credenciais de banco de dados:
+    ```sh
+    cp .env.example .env
+    ```
 
-### Premium Partners
+5. Gere a chave da aplicação Laravel:
+    ```sh
+    php artisan key:generate
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+6. Execute as migrações do banco de dados:
+    ```sh
+    php artisan migrate
+    ```
 
-## Contributing
+7. Popule o banco de dados com dados de voos (opcional):
+    ```sh
+    php artisan db:seed
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+8. Inicie o servidor de desenvolvimento:
+    ```sh
+    php artisan serve
+    ```
 
-## Code of Conduct
+A aplicação estará disponível em `http://localhost:8000`.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Uso
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Busca de Voos
 
-## License
+Para buscar voos, envie requisições GET para a seguinte rota da API:
+    ```
+        [GET] http://localhost:8000/api/flights/optimal
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Caso queira fazer a busca via front-end, acessa pela seguinte rota:
+    ```
+        [GET] http://localhost:8000/flights
+    ```
+
+### Algoritmo A* e Fronteira de Pareto
+
+A lógica do algoritmo A* e da fronteira de Pareto está implementada no diretório `app/Services/FlightService.php`. A busca leva em consideração múltiplos critérios para encontrar os voos mais otimizados.
+
+## Estrutura do Projeto
+
+- `app/Models/Flight.php`: Modelo de voo.
+- `app/Http/Controllers/Web/FlightController.php`: Controlador responsável pela busca de voos.
+- `app/Services/FlightService.php`: Serviço que implementa o algoritmo A* e a fronteira de Pareto.
+- `database/migrations/`: Arquivos de migração do banco de dados.
+- `database/seeders/`: Seeders para popular o banco de dados.
+
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## Contato
+
+Para dúvidas ou sugestões, entre em contato pelo email: gabrielsouza2@discente.ufg.br
+
+---
+
+Feito com ❤️ por Gabriel Oliveira
